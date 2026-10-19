@@ -28,6 +28,28 @@ Identificar las variables más relevantes para la predicción de popularidad.
 
 Evaluar posibles sesgos y consideraciones éticas asociadas al uso de estos datos.
 
+### 2.3 KPIs del proyecto
+
+Uno de los objetivos del proyecto es la creacion de KPIs y sus metas.
+
+ | KPIs | Definicion | Meta |
+ |--|--|--|
+ | Precision en el top | Sera un porcentaje de canciones las cuales el modelo marcara como el "top 10% del genero", y realmente lo son. | ≥ 40% |
+ | Equidad entre generos | La diferencia de error entre el genero mejor y el peor predicho | ≤ 10 puntos |
+ | Tasa de falsos positivos | Sera el porcentaje de canciones que el modelo predice como populares, pero en verdad resultan no serlo (popularidad < 40) | ≤ 15% |
+ | Error de prediccion (MAE) | Diferencia promedio entre la popularidad real y la predicha | Mejorar ≥ 20% respecto de predecir el promedio del genero |
+
+### 2.4 Metodologia utilizada (CRISP-DM)
+
+| Indice | Estructura | Descripcion |
+|--|--|--|
+| 1 | Comprencion del negocio | Identificar la necesidad del cliente de predecir la popularidad de las canciones para optimizar inversiones en marketing |
+| 2 | Comprension de los datos | Analisis exploratotio (EDA), estadisticas descriptivas y correlaciones del conjunto de datos de Spotify | 
+| 3 | Preparacion de los datos | Limpieza de datos (Eliminacion de nulos, borrado de columnas redundantes como duration_ms)
+| 4 | Modelado | Entranamiento de algoritmo de Machine Learning para predecir la popularidad | 
+| 5 | Evaluacion | Medicion de los resultados del modelo utilizando los KPIs definidos anteriormente para verificar si cumplen las metas | 
+| 6 | Despliegue | Presentacion tecnica de las conluciones y de la entrega del informe y del repositorio | 
+ 
 ## 3. Estadísticas descriptivas del dataset 
 
 | Artistas únicos | Albumes únicos | Canciones únicas | Popularidad Promedio |
@@ -46,7 +68,13 @@ Para conseguir estos datos se utilizó la variable .unique() y .mean()
 
 - **Fuente:** AVA Duoc
 
-- **Herramientas utilizadas:** \[Google Colab, Google Drive\]
+- **Herramientas utilizadas:** Justificacion de las herramientas que se usaron.
+
+  | Herramienta | Uso | Justificacion |
+  |--|--|--|
+  | Google Colab | Desarrollo del notebook | Herramienta hecha para poder crear notebooks de ciencia de datos con python y mediante el uso de la importacion de librerias, no es necesario descargar nada |
+  | GitHub | Versionado y entrega | Para mantener registro del aporte de cada miembro, controlar las versiones del proyecto y poder reproducir el proyecto |
+  | Google Drive | Almacenamiento del dataset | Permite montar el archivo en colab sin tener que buscarlo |
 
 ### 4.2 Estructura del dataset
 
@@ -143,7 +171,7 @@ Se agruparon las canciones por género y se calculó la popularidad promedio de 
 
 ### 6.1 Posibles sesgos
 
-Sesgo temporal: Canciones más recientes pueden tener ventaja en el score de popularidad.
+Sesgo temporal: Canciones más recientes pueden tener ventaja en el score de popularidad. Este sesgo presenta una limitacion, no se puede medir este sesgo ya que no hay fecha de lanzamiento en el datacet.
 
 Sesgo de sobrerrepresentación: El df cuenta con 1000 canciones por cada género. Al ser una distribución artificial no refleja el consumo real de spotify.
 
@@ -154,6 +182,13 @@ Riesgo de retroalimentación algorítmica: Predecir y promover solo lo “popula
 Falta de equidad con los artistas: Spotify cuenta tanto con artistas respaldados por enormes sellos discográficos , como con artistas independientes. Por lo que si predecimos la popularidad sin ese contexto no hay forma de que un artista independiente pueda competir con los números de un artista ya consolidado.
 
 Usar la variable “Explicit” como predictor : Considerar esa variable en decidir qué contenido promocionar podría incentivar contenido explícito solo para ganar visibilidad, sin considerar el impacto en audiencias sensibles.
+
+### 6.3 Privacidad de los datos
+
+- El dataset no tiene datos de usuarios, la popularidad es una metrica agregada.
+- Si contiene **nombres de artistas**, que son datos personales de personas reales. Su uso se limita a fines academicos y no se elaboran perfiles individuales.
+- Marco normativo: **Ley 19.628** y **Ley 21.719** de proteccion de datos personales en Chile, y como referencia el **GDPR** (minimizacion y limitacion de la finalidad).
+- Uso comercial: habria que revisar los **terminos de uso de la API de Spotify**. 
 
 ## 7. Conclusiones preliminares
 
