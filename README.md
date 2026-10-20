@@ -72,7 +72,7 @@ El dataset original contiene 114.000 registros y 21 columnas, incluyendo una col
 
 Para contar correctamente las canciones unicas utilizamos `track_id`, ya que diferentes canciones pueden tener el mismo nombre. Ademas, identificamos que algunas canciones aparecen repetidas porque están clasificadas en más de un género musical.
 
-Por lo cual este analisis nos permitio conocer la cantidad de información disponible y detectar registros repetidos. Por eso, fue necesario realizar una limpieza de datos antes de continuar con el análisis de popularidad.
+Por lo cual este analisis nos permitio conocer la cantidad de información disponible y detectar registros repetidos. Por eso, fue necesario realizar una limpieza de datos antes de continuar con el análisis de popularidad.,
 
 ![](images/image10.png)
 
