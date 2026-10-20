@@ -84,7 +84,11 @@ Por lo cual este analisis nos permitio conocer la cantidad de información dispo
 
 - **Fuente:** AVA Duoc
 
-- **Herramientas utilizadas:** Justificacion de las herramientas que se usaron.
+- **Justificación de las herramientas utilizadas:**
+
+Para desarrollar el proyecto utilizamos google colab, ya que nos permite trabajar con Python y sus librerias sin necesidad de instalar programas adicionales. Tambien utilizamos github para organizar los archivos, mantener un registro de los cambios y facilitar el trabajo en equipo. Por ultimo, google drive se considero como una alternativa para almacenar y compartir la base de datos.
+
+Estas herramientas nos permiten mantener el proyecto organizado.
 
   | Herramienta | Uso | Justificacion |
   |--|--|--|
@@ -129,21 +133,61 @@ Por lo cual este analisis nos permitio conocer la cantidad de información dispo
 
 ### 5.1 Calidad de los datos
 
-Al momento del inicio del EDA nos percatamos que la cantidad de columnas era correcta y llegamos a la conclusión de que no sobra ninguna, por lo tanto no se modificaron.
+Al momento del inicio del EDA, utilizamos Python y la librería Pandas para revisar la informacion. Mediante funciones como info(), describe() e isnull() nos percatamos  que existen valores nulos, registros duplicados y posibles valores atípicos.
 
-![](images/image4.png)
+**1. Identificacion y eliminacion de valores nulos**
 
-Posteriormente se realizó un búsqueda de valores nulos en el DF, mediante varias funciones se ubicaron 3 datos nulos en una sola fila. Primero se usó la función .info y luego la función .isnull para ubicar de manera más precisa los valores nulos.
+El dataset original contiene 114.000 registros y 21 columnas. Durante la revision encontramos tres valores nulos en las columnas `artists`, `album_name` y `track_name`, correspondientes a una misma fila.
 
-Se descubrió que los 3 valores nulos estaban en una misma fila, al ser pocos valores nulos y en una sola fila se decidió borrar la fila ya que no afecta al DF.
+Como se trataba de un solo registro, decidimos eliminarlo, ya que su eliminacion no afecta al conjunto de datos.
 
-Antes de borrar Después de borrar
+Despues de este procedimiento quedaron 113.999 registros.
 
-![](images/image3.png) ![](images/image7.png)
+![](images/image3.png)
 
-Luego de esto, se realizó la eliminación de la fila que contenía datos nulos y la eliminación de la columna duration_ms , ya que el mapa de correlación mostró una correlación de 1 con duration_min.
+![](images/image7.png)
 
-![](images/image2.png)
+**2. Identificación y tratamiento de duplicados**
+
+Posteriormente revisamos los registros duplicados utilizando la columna `track_id`, que permite identificar cada canción.
+
+Encontramos 24.259 registros con identificadores repetidos. Esto ocurre porque una misma canción puede aparecer clasificada en diferentes géneros musicales.
+
+Para evitar que estas repeticiones afecten los análisis y los resultados de un futuro modelo, eliminamos los duplicados utilizando `drop_duplicates()`, conservando la primera aparición de cada canción.
+
+Después de este proceso quedaron 89.740 canciones únicas.
+
+Esta decisión también tiene una limitación, ya que algunas canciones pertenecen a más de un género, pero al eliminar los duplicados se conserva solamente el primer género registrado.
+
+**3. Análisis de canciones con popularidad cero**
+
+Durante el análisis identificamos canciones con un valor de popularidad igual a cero.
+
+Este resultado no necesariamente significa que los datos estén incorrectos, ya que puede representar canciones con poca popularidad o sin información suficiente sobre su nivel de reproducción.
+
+Por este motivo decidimos conservar estos registros, ya que no tenemos evidencia suficiente para considerarlos errores o datos faltantes.
+
+**4. Revisión de valores atípicos en la duración**
+
+También analizamos las canciones con duraciones muy cortas o demasiado largas.
+
+Identificamos 790 canciones con duración inferior a un minuto y 550 canciones con duración superior a diez minutos.
+
+Al revisar estos casos, observamos que algunas duraciones pueden ser normales dependiendo del género musical, como canciones infantiles cortas o mezclas de música electrónica más extensas.
+
+Por esta razón decidimos conservar estos registros, ya que eliminarlos podría afectar la representación de ciertos géneros.
+
+**5. Resumen de la preparación de datos**
+
+| Etapa | Registros |
+|---|---:|
+| Dataset original | 114.000 |
+| Después de eliminar valores nulos | 113.999 |
+| Después de eliminar duplicados por `track_id` | 89.740 |
+| Después de revisar popularidad cero | 89.740 |
+| Después de revisar valores atípicos | 89.740 |
+
+La preparación de datos permitio identificar y corregir problemas que podían afectar el analisis. Finalmente, obtuvimos un conjunto de 89.740 canciones unicas, conservando los valores de popularidad cero y las duraciones atípicas debido a que no encontramos evidencia suficiente para eliminarlos.
 
 ### 5.2 Análisis exploratorio
 
