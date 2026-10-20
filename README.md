@@ -157,6 +157,8 @@ Para evitar que estas repeticiones afecten los análisis y los resultados de un 
 
 Después de este proceso quedaron 89.740 canciones únicas.
 
+![](images/image2.png)
+
 Esta decisión también tiene una limitación, ya que algunas canciones pertenecen a más de un género, pero al eliminar los duplicados se conserva solamente el primer género registrado.
 
 **3. Análisis de canciones con popularidad cero**
