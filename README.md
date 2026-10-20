@@ -41,6 +41,8 @@ Uno de los objetivos del proyecto es la creacion de KPIs y sus metas.
 
 ### 2.4 Metodologia utilizada (CRISP-DM)
 
+Para desarrollar este proyecto utilizamos la metodología CRISP-DM, que permite organizar las distintas etapas de un proyecto de Machine Learning, desde comprender el problema hasta evaluar los resultados.
+
 | Indice | Estructura | Descripcion |
 |--|--|--|
 | 1 | Comprencion del negocio | Identificar la necesidad del cliente de predecir la popularidad de las canciones para optimizar inversiones en marketing |
