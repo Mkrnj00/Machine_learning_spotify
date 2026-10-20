@@ -43,22 +43,36 @@ Uno de los objetivos del proyecto es la creacion de KPIs y sus metas.
 
 Para desarrollar este proyecto utilizamos la metodología CRISP-DM, que permite organizar las distintas etapas de un proyecto de Machine Learning, desde comprender el problema hasta evaluar los resultados.
 
-| Indice | Estructura | Descripcion |
-|--|--|--|
-| 1 | Comprencion del negocio | Identificar la necesidad del cliente de predecir la popularidad de las canciones para optimizar inversiones en marketing |
-| 2 | Comprension de los datos | Analisis exploratotio (EDA), estadisticas descriptivas y correlaciones del conjunto de datos de Spotify | 
-| 3 | Preparacion de los datos | Limpieza de datos (Eliminacion de nulos, borrado de columnas redundantes como duration_ms)
-| 4 | Modelado | Entranamiento de algoritmo de Machine Learning para predecir la popularidad | 
-| 5 | Evaluacion | Medicion de los resultados del modelo utilizando los KPIs definidos anteriormente para verificar si cumplen las metas | 
-| 6 | Despliegue | Presentacion tecnica de las conluciones y de la entrega del informe y del repositorio | 
+| Etapa | Descripción | Estado |
+|---|---|---|
+| 1. Comprension del negocio | Se identifico la necesidad de analizar y predecir la popularidad de las canciones para apoyar las decisiones de promocion musical. | Realizado |
+| 2. Comprension de los datos | Se exploro el dataset de Spotify, revisando sus variables, columnas, valores nulos y relaciones con la popularidad. | Realizado |
+| 3. Preparacion de los datos | Se realizo la limpieza de valores nulos, el tratamiento de canciones duplicadas y la revision de valores atipicos para preparar los datos. | Realizado |
+| 4. Modelado | Se considera entrenar un modelo de Machine Learning para predecir la popularidad de las canciones utilizando las variables seleccionadas. | Pendiente |
+| 5. Evaluación | Se evaluaron los resultados del modelo mediante los KPIs definidos para comprobar su rendimiento. | Pendiente |
+| 6. Despliegue | En una etapa posterior se podra utilizar el modelo para apoyar decisiones relacionadas con la promocion de canciones. | Pendiente |
+
+En esta primera etapa del proyecto nos enfocamos en comprender el problema, analizar la información y preparar los datos. Esto nos permite contar con una base más confiable para desarrollar posteriormente el modelo predictivo.
  
-## 3. Estadísticas descriptivas del dataset 
+## 3. Estadísticas descriptivas del dataset
 
-| Artistas únicos | Albumes únicos | Canciones únicas | Popularidad Promedio |
-|-----------------|----------------|------------------|----------------------|
-| 31 437          | 46 589         | 73 608           | 33.24                |
+Para conocer mejor la informacion disponible, realizamos un analisis inicial utilizando funciones de Python como `nunique()`, `mean()`, `info()` y `describe()`.
 
-Para conseguir estos datos se utilizó la variable .unique() y .mean()
+El dataset original contiene 114.000 registros y 21 columnas, incluyendo una columna de índice que no aporta información al analisis.
+
+| Indicador | Resultado |
+|---|---|
+| Registros originales | 114.000 |
+| Artistas únicos | 31.437 |
+| Álbumes únicos | 46.589 |
+| Nombres de canciones únicos | 73.608 |
+| Canciones únicas por `track_id` después de eliminar nulos | 89.740 |
+| Popularidad promedio del dataset original | 33,24 |
+| Géneros musicales | 114 |
+
+Para contar correctamente las canciones unicas utilizamos `track_id`, ya que diferentes canciones pueden tener el mismo nombre. Ademas, identificamos que algunas canciones aparecen repetidas porque están clasificadas en más de un género musical.
+
+Por lo cual este analisis nos permitio conocer la cantidad de información disponible y detectar registros repetidos. Por eso, fue necesario realizar una limpieza de datos antes de continuar con el análisis de popularidad.
 
 ![](images/image10.png)
 
