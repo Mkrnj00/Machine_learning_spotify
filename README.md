@@ -245,43 +245,141 @@ Estos hallazgos nos permiten identificar variables que podrían ser utiles para 
 
 ### 5.3 Variables menos relevantes para el modelo
 
+Para identificar que caracteristicas tienen relacion con la popularidad, realizamos un analisis de correlacion entre las variables numericas del dataset.
+
+**Objetivo:** Identificar si caracteristicas como la energia, duracion, tempo y otras variables de audio presentan una relacion lineal con la popularidad de las canciones.
+
 ![](images/image6.png)
 
-El análisis de correlación lineal muestra que las variables numéricas , es decir los atributos de audio, por sí solos no explican la popularidad de una canción.
+**Hallazgo:** Los resultados muestran que las caracteristicas de audio tienen correlaciones lineales debiles con la popularidad. La variable `instrumentalness` presenta una correlacion aproximada de -0,13, mientras que la duracion tiene una correlacion cercana a -0,02.
 
-### 5.4 Variables más relevantes para el modelo
+Tambien encontramos relaciones entre algunas caracteristicas de audio, como `energy` y `loudness`, con una correlacion aproximada de 0,76.
+
+**Implicancia:** Estos resultados indican que las caracteristicas de audio por si solas no presentan una relacion lineal fuerte con la popularidad. Sin embargo, esto no significa que debamos descartarlas, ya que podrian aportar informacion al combinarlas con otras variables en un modelo de Machine Learning.
+
+### 5.4 Variables mas relevantes para el modelo
+
+Despues de analizar las caracteristicas numericas, realizamos una comparacion de la popularidad segun el genero musical.
+
+**Objetivo:** Identificar si existen diferencias importantes en la popularidad de las canciones dependiendo del genero al que pertenecen.
 
 ![](images/image5.png)
 
-Se agruparon las canciones por género y se calculó la popularidad promedio de cada uno, para identificar los 10 géneros más populares y los 10 menos populares. El boxplot muestra no solo el promedio, sino la dispersión completa de cada género, permitiendo ver si la popularidad es consistente dentro del género o varía mucho entre sus canciones.
+**Hallazgo:** El grafico compara los 10 generos con mayor popularidad promedio y los 10 con menor popularidad. Se observan diferencias importantes entre ambos grupos, aunque tambien existe variacion dentro de cada genero.
 
-## 6. Evaluación de sesgos, ética y privacidad de los datos
+Esto significa que algunas canciones de generos con baja popularidad promedio pueden alcanzar valores altos, mientras que no todas las canciones de los generos mas populares tienen buenos resultados.
+
+**Implicancia:** El genero musical parece ser una variable relevante para diferenciar los niveles de popularidad de las canciones. Por eso, consideramos importante incluirlo en el futuro modelo predictivo.
+
+**Conclusion:** El analisis exploratorio muestra que
+
+## 6. Evaluacion de sesgos, etica y privacidad de los datos
+
+Durante el desarrollo del proyecto identificamos algunos posibles sesgos y riesgos eticos que pueden afectar los resultados de un futuro modelo de Machine Learning.
+
+Es importante considerar estos aspectos, ya que el objetivo no es solamente predecir la popularidad, sino tambien evitar decisiones que puedan perjudicar a ciertos artistas o generos musicales.
 
 ### 6.1 Posibles sesgos
 
-Sesgo temporal: Canciones más recientes pueden tener ventaja en el score de popularidad. Este sesgo presenta una limitacion, no se puede medir este sesgo ya que no hay fecha de lanzamiento en el datacet.
+**Sesgo temporal:**
 
-Sesgo de sobrerrepresentación: El df cuenta con 1000 canciones por cada género. Al ser una distribución artificial no refleja el consumo real de spotify.
+Las canciones mas recientes podrian tener ventajas o desventajas en su nivel de popularidad. Sin embargo, el dataset no contiene fechas de lanzamiento, por lo que no podemos comprobar directamente este sesgo.
 
-### 6.2 Consideraciones éticas
+Por esta razon, lo consideramos una limitacion del conjunto de datos y no un resultado confirmado.
 
-Riesgo de retroalimentación algorítmica: Predecir y promover solo lo “popular” puede reducir la diversidad musical.
+**Sesgo de representacion de generos:**
 
-Falta de equidad con los artistas: Spotify cuenta tanto con artistas respaldados por enormes sellos discográficos , como con artistas independientes. Por lo que si predecimos la popularidad sin ese contexto no hay forma de que un artista independiente pueda competir con los números de un artista ya consolidado.
+El dataset original contiene 1.000 registros por cada uno de los 114 generos musicales. Esta distribucion no necesariamente representa la cantidad real de canciones o reproducciones que tiene cada genero en Spotify.
 
-Usar la variable “Explicit” como predictor : Considerar esa variable en decidir qué contenido promocionar podría incentivar contenido explícito solo para ganar visibilidad, sin considerar el impacto en audiencias sensibles.
+Ademas, al eliminar las canciones duplicadas por `track_id`, algunos generos pueden quedar con menos registros que otros.
 
-### 6.3 Privacidad de los datos
+Esto podria afectar los resultados del futuro modelo, ya que algunos generos podrian tener mayor representacion que otros.
 
-- El dataset no tiene datos de usuarios, la popularidad es una metrica agregada.
-- Si contiene **nombres de artistas**, que son datos personales de personas reales. Su uso se limita a fines academicos y no se elaboran perfiles individuales.
-- Marco normativo: **Ley 19.628** y **Ley 21.719** de proteccion de datos personales en Chile, y como referencia el **GDPR** (minimizacion y limitacion de la finalidad).
-- Uso comercial: habria que revisar los **terminos de uso de la API de Spotify**. 
+### 6.2 Consideraciones eticas
 
-## 7. Conclusiones preliminares
+**Riesgo de retroalimentacion algoritmica:**
 
-El análisis muestra que la popularidad depende más del género musical y factores externos que de las características de audio.
+Si Spotify utiliza un modelo para promocionar solamente las canciones que tienen mayor popularidad, podria generar un ciclo donde los artistas populares reciben cada vez mas visibilidad, mientras que otros tienen menos oportunidades.
 
-**Hallazgo principal**
+**Desigualdad entre artistas:**
 
-El género con mayor popularidad promedio (\`pop-film\`, 59.3) supera por más de 57 puntos al más bajo (\`iranian\`, 2.2). Géneros como \`pop\`, \`jazz\` y \`classical\` muestran cajas muy amplias, indicando alta variabilidad interna. Este dato es muy importante, porque no da a entender que el género por sí solo no garantiza popularidad, pero sigue siendo la variable considerando tanto categóricas como numéricas la que mejor separa canciones populares de no populares.
+Los artistas reconocidos generalmente cuentan con mas recursos, publicidad y seguidores que los artistas independientes.
+
+Si el modelo utiliza solamente la popularidad historica, podria favorecer a los artistas consolidados y dificultar que nuevos artistas tengan oportunidades de promocion.
+
+**Uso de la variable explicit:**
+
+Durante el analisis encontramos diferencias en la proporcion de canciones explicitas entre el catalogo general y las canciones con mayor popularidad.
+
+Sin embargo, esto no significa que el contenido explicito provoque mayor popularidad. Utilizar esta variable para decidir que canciones promocionar podria generar decisiones poco equilibradas.
+
+### 6.3 Privacidad y proteccion de los datos
+
+El dataset utilizado no contiene informacion personal de los usuarios que escuchan musica, como nombres, correos electronicos o historial individual de reproducciones.
+
+La popularidad corresponde a un indicador general de cada cancion.
+
+Sin embargo, el dataset contiene nombres de artistas, por lo que es importante utilizar esta informacion de manera responsable y solamente para los objetivos academicos del proyecto.
+
+Para considerar la proteccion de los datos, tomamos como referencia:
+
+- **Ley 19.628:** normativa chilena relacionada con la proteccion de datos personales.
+- **Ley 21.719:** nueva normativa chilena que modifica el marco de proteccion de datos personales.
+- **GDPR:** reglamento europeo que establece principios relacionados con el uso responsable y la proteccion de datos.
+
+En caso de utilizar esta informacion con fines comerciales, tambien seria necesario revisar los terminos y condiciones de uso de los datos de Spotify.
+
+**Conclusion:** Identificar estos posibles sesgos y riesgos nos permite comprender que los resultados del modelo podrian afectar de manera diferente a los artistas y generos musicales. Por eso, es importante evaluar estos aspectos antes de utilizar las predicciones para tomar decisiones comerciales.
+
+## 7. Conclusiones del proyecto
+
+Durante el desarrollo de este proyecto realizamos un analisis exploratorio del dataset de Spotify para identificar que caracteristicas pueden estar relacionadas con la popularidad de las canciones.
+
+Los resultados nos permitieron comprender mejor el comportamiento de los datos, identificar problemas de calidad y reconocer variables que podrian ser importantes para un futuro modelo de Machine Learning.
+
+### 7.1 Principales hallazgos
+
+**1. Importancia del genero musical**
+
+El analisis mostro que existen diferencias importantes en la popularidad promedio de los generos musicales. Esto nos permite considerar el genero como una variable relevante para el futuro modelo predictivo.
+
+Sin embargo, pertenecer a un genero popular no garantiza que todas sus canciones tengan una popularidad alta.
+
+**2. Caracteristicas de audio**
+
+Las variables de audio, como energia, tempo, duracion y otras caracteristicas, presentaron correlaciones lineales debiles con la popularidad.
+
+Esto indica que ninguna de estas variables, por si sola, permite explicar completamente la popularidad de una cancion.
+
+**3. Calidad y preparacion de los datos**
+
+Durante la preparacion identificamos valores nulos, canciones duplicadas y valores atipicos.
+
+Despues de realizar la limpieza, el dataset quedo con 89.740 canciones unicas, lo que permite trabajar con informacion mas organizada para las siguientes etapas.
+
+**4. Sesgos y aspectos eticos**
+
+Identificamos posibles sesgos relacionados con la representacion de generos, la popularidad de artistas consolidados y la falta de informacion temporal.
+
+Tambien consideramos aspectos de privacidad y los posibles efectos de utilizar las predicciones para decidir que canciones promocionar.
+
+### 7.2 Cumplimiento de los objetivos especificos
+
+| Objetivo especifico | Resultado obtenido | Cumplimiento |
+|---|---|---|
+| Realizar un analisis exploratorio para identificar patrones | Se identificaron diferencias de popularidad entre generos y relaciones debiles con las variables de audio. | Cumplido |
+| Evaluar la calidad y preparar los datos | Se eliminaron valores nulos y duplicados, ademas de revisar los valores atipicos y la popularidad cero. | Cumplido |
+| Identificar variables relevantes para la prediccion | El genero musical mostro diferencias importantes de popularidad, mientras que las variables de audio presentaron correlaciones lineales debiles. | Cumplido en etapa exploratoria |
+| Evaluar sesgos y consideraciones eticas | Se identificaron posibles sesgos, riesgos eticos y aspectos relacionados con la privacidad. | Cumplido en etapa exploratoria |
+
+### 7.3 Conclusion general
+
+Como conclusion, consideramos que el proyecto nos permitio comprender mejor los factores que pueden estar relacionados con la popularidad de las canciones en Spotify.
+
+Uno de los principales hallazgos fue que el genero musical presenta diferencias importantes en los niveles de popularidad, mientras que las caracteristicas de audio tienen relaciones lineales mas debiles.
+
+Ademas, la limpieza de los datos fue necesaria para evitar que los registros duplicados afectaran los resultados.
+
+Aunque logramos cumplir los objetivos de esta primera etapa, todavia queda pendiente entrenar y evaluar un modelo de Machine Learning que permita comprobar si estas variables realmente ayudan a predecir la popularidad.
+
+Por lo tanto, el siguiente paso sera utilizar el dataset preparado para desarrollar el modelo predictivo y evaluar sus resultados mediante los KPIs definidos anteriormente.
