@@ -191,31 +191,57 @@ Por esta razón decidimos conservar estos registros, ya que eliminarlos podría 
 
 La preparación de datos permitio identificar y corregir problemas que podían afectar el analisis. Finalmente, obtuvimos un conjunto de 89.740 canciones unicas, conservando los valores de popularidad cero y las duraciones atípicas debido a que no encontramos evidencia suficiente para eliminarlos.
 
-### 5.2 Análisis exploratorio
+### 5.2 Análisis exploratorio de datos (EDA)
 
-**EDA:**
+En esta etapa analizamos la relación entre la popularidad de las canciones y algunas de sus caracteristicas, como el artista, género musical, contenido explicito y duracion.
 
-Teniendo en cuenta el problema de la empresa, la cual requiere la predicción de la popularidad de las canciones se tomaron en cuenta las variables de Popularidad, los géneros, los artistas y la duración de las canciones.
+El objetivo es identificar patrones que puedan ayudarnos a seleccionar las variables más relevantes para un futuro modelo de Machine Learning.
 
-De esta manera se reunió la cantidad de información suficiente para que la empresa pueda entender cómo se comporta la popularidad para el futuro.
+**1. Relación entre duracion y popularidad**
 
-Primero se tomó en cuenta la distribución de la popularidad de las canciones por duración de las mismas. De esta manera se puede visualizar cómo se comporta la popularidad de las canciones según su duración y en donde se concentra la mayoría del catálogo de la empresa.
-
-**Gráfico para observar la distribución de la popularidad de las canciones por el tiempo de duración, para observar outliers.**
+**Objetivo:** Analizar si la duracion de una cancion tiene relacion con su popularidad e identificar posibles valores atipicos.
 
 ![](images/image9.png)
 
-**Top 5 Artistas Mas Populares**
+**Hallazgo:** La duracion mediana de las canciones es aproximadamente 3,55 minutos. También encontramos canciones con duraciones extremas, incluyendo algunas que superan los 10 minutos.
+
+**Implicancia:** La duracion por si sola no parece explicar de manera importante la popularidad. Además, decidimos conservar las duraciones atipicas, ya que pueden ser normales en determinados generos musicales.
+
+**2. Top 5 artistas mas populares**
+
+**Objetivo:** Identificar los artistas con mayor popularidad promedio, considerando un minimo de 10 canciones para evitar resultados poco representativos.
 
 ![](images/image8.png)
 
-**Los 5 Géneros Más Populares**
+**Hallazgo:** Bad Bunny destaca entre los artistas con mayor popularidad promedio. Para realizar esta comparación se consideraron solamente artistas con al menos 10 canciones.
+
+**Implicancia:** La popularidad puede variar bastante entre artistas. Por eso, es importante considerar que algunos artistas ya tienen una trayectoria y reconocimiento que pueden influir en sus resultados.
+
+**3. Los 5 generos mas populares**
+
+**Objetivo:** Identificar que generos musicales presentan los mayores niveles de popularidad promedio.
 
 ![](images/image11.png)
 
-**Porcentaje de Canciones Explícitas vs No Explícitas (Popularidad > 60)**
+**Hallazgo:** Los generos con mayor popularidad promedio en el analisis actualizado son k-pop, pop-film, metal, chill y latino.
+
+**Implicancia:** El género musical presenta diferencias importantes en los niveles de popularidad, por lo que puede ser una variable relevante para desarrollar un modelo predictivo.
+
+**4. Canciones explicitas y no explicitas**
+
+**Objetivo:** Analizar si existe una relación entre el contenido explicito de una cancion y su popularidad.
 
 ![](images/image1.png)
+
+**Hallazgo:** Entre las canciones con popularidad superior a 60, aproximadamente el 14,4% contiene contenido explicito, mientras que en el catalogo analizado este porcentaje es cercano al 8,6%.
+
+**Implicancia:** El contenido explicito podria ser una variable util para el analisis, pero esta relacion no demuestra que una cancion sea mas popular por ser explicita. Tambien debemos considerar los posibles riesgos eticos de utilizar esta caracteristica para recomendar o promocionar musica.
+
+**Conclusion del analisis exploratorio**
+
+Los resultados muestran que existen diferencias importantes de popularidad entre generos y artistas. En cambio, caracteristicas como la duracion no presentan una relacion lineal fuerte con la popularidad.
+
+Estos hallazgos nos permiten identificar variables que podrían ser utiles para el futuro modelo predictivo y comprender mejor cómo se comporta el catalogo musical.
 
 ### 5.3 Variables menos relevantes para el modelo
 
