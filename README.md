@@ -30,14 +30,14 @@ Evaluar posibles sesgos y consideraciones éticas asociadas al uso de estos dato
 
 ### 2.3 KPIs del proyecto
 
-Uno de los objetivos del proyecto es la creacion de KPIs y sus metas.
+Definimos los siguientes indicadores y metas para la futura evaluación del modelo. Como la variable popularity tiene valores entre 0 y 100, se propone predecir primero ese puntaje y evaluar los resultados con métricas de regresion. Para los indicadores que necesitan identificar canciones populares, se usara el criterio operativo popularidad real o predicha ≥ 60, segun corresponda. Esto es una definicion de trabajo, no un resultado del modelo.
 
- | KPIs | Definicion | Meta |
- |--|--|--|
- | Precision en el top | Sera un porcentaje de canciones las cuales el modelo marcara como el "top 10% del genero", y realmente lo son. | ≥ 40% |
- | Equidad entre generos | La diferencia de error entre el genero mejor y el peor predicho | ≤ 10 puntos |
- | Tasa de falsos positivos | Sera el porcentaje de canciones que el modelo predice como populares, pero en verdad resultan no serlo (popularidad < 40) | ≤ 15% |
- | Error de prediccion (MAE) | Diferencia promedio entre la popularidad real y la predicha | Mejorar ≥ 20% respecto de predecir el promedio del genero |
+| KPI | Definición | Meta propuesta |
+|---|---|---|
+| Precision entre canciones predichas populares | De las canciones con popularidad predicha ≥ 60, porcentaje que realmente tiene popularidad ≥ 60. | ≥ 40% |
+| Equidad entre generos | Diferencia entre el MAE del genero con mayor error y el de menor error, medida en puntos de popularidad. | ≤ 10 puntos |
+| Tasa de falsos positivos | De las canciones con popularidad real < 60, porcentaje que el modelo predice con popularidad ≥ 60. | ≤ 15% |
+| Error de predicción (MAE) | Diferencia absoluta promedio entre popularidad real y predicha. | Reducir al menos 20% el MAE respecto de predecir el promedio del genero |
 
 ### 2.4 Metodologia utilizada (CRISP-DM)
 
@@ -48,8 +48,8 @@ Para desarrollar este proyecto utilizamos la metodología CRISP-DM, que permite 
 | 1. Comprension del negocio | Se identifico la necesidad de analizar y predecir la popularidad de las canciones para apoyar las decisiones de promocion musical. | Realizado |
 | 2. Comprension de los datos | Se exploro el dataset de Spotify, revisando sus variables, columnas, valores nulos y relaciones con la popularidad. | Realizado |
 | 3. Preparacion de los datos | Se realizo la limpieza de valores nulos, el tratamiento de canciones duplicadas y la revision de valores atipicos para preparar los datos. | Realizado |
-| 4. Modelado | Se considera entrenar un modelo de Machine Learning para predecir la popularidad de las canciones utilizando las variables seleccionadas. | Pendiente |
-| 5. Evaluación | Se evaluaron los resultados del modelo mediante los KPIs definidos para comprobar su rendimiento. | Pendiente |
+| 4. Modelado | Se planifica entrenar y comparar modelos supervisados, además de explorar una técnica no supervisada, en la siguiente etapa. | Pendiente |
+| 5. Evaluación | Se evaluarán los modelos utilizando métricas y los KPIs definidos cuando se complete el entrenamiento. | Pendiente |
 | 6. Despliegue | En una etapa posterior se podra utilizar el modelo para apoyar decisiones relacionadas con la promocion de canciones. | Pendiente |
 
 En esta primera etapa del proyecto nos enfocamos en comprender el problema, analizar la información y preparar los datos. Esto nos permite contar con una base más confiable para desarrollar posteriormente el modelo predictivo.
@@ -64,11 +64,12 @@ El dataset original contiene 114.000 registros y 21 columnas, incluyendo una col
 |---|---|
 | Registros originales | 114.000 |
 | Artistas únicos | 31.437 |
-| Álbumes únicos | 46.589 |
-| Nombres de canciones únicos | 73.608 |
+| Albumes únicos | 46.589 |
+| Nombres de canciones unicos | 73.608 |
 | Canciones únicas por `track_id` después de eliminar nulos | 89.740 |
 | Popularidad promedio del dataset original | 33,24 |
-| Géneros musicales | 114 |
+| Generos musicales en el dataset original | 114 |
+| Generos musicales después de la limpieza | 113 |
 
 Para contar correctamente las canciones unicas utilizamos `track_id`, ya que diferentes canciones pueden tener el mismo nombre. Ademas, identificamos que algunas canciones aparecen repetidas porque están clasificadas en más de un género musical.
 
@@ -94,7 +95,6 @@ Estas herramientas nos permiten mantener el proyecto organizado.
   |--|--|--|
   | Google Colab | Desarrollo del notebook | Herramienta hecha para poder crear notebooks de ciencia de datos con python y mediante el uso de la importacion de librerias, no es necesario descargar nada |
   | GitHub | Versionado y entrega | Para mantener registro del aporte de cada miembro, controlar las versiones del proyecto y poder reproducir el proyecto |
-  | Google Drive | Almacenamiento del dataset | Permite montar el archivo en colab sin tener que buscarlo |
 
 ### 4.2 Estructura del dataset
 
@@ -163,15 +163,15 @@ Esta decisión también tiene una limitación, ya que algunas canciones pertenec
 
 **3. Análisis de canciones con popularidad cero**
 
-Durante el análisis identificamos canciones con un valor de popularidad igual a cero.
+Durante el analisis identificamos canciones con un valor de popularidad igual a cero.
 
-Este resultado no necesariamente significa que los datos estén incorrectos, ya que puede representar canciones con poca popularidad o sin información suficiente sobre su nivel de reproducción.
+Despues de la limpieza encontramos 9.447 canciones con popularidad cero (10,53%). Estos valores se concentran de manera diferente segun el genero, por ejemplo en el analisis aparecen proporciones altas en jazz, iranian y romance. Esto no demuestra que sean errores, sino que podrian reflejar caracteristicas de los datos o de como se asigna la popularidad.
 
-Por este motivo decidimos conservar estos registros, ya que no tenemos evidencia suficiente para considerarlos errores o datos faltantes.
+Por este motivo decidimos conservar estos registros y tener en cuenta su distribución por género al evaluar los modelos.
 
 **4. Revisión de valores atípicos en la duración**
 
-También analizamos las canciones con duraciones muy cortas o demasiado largas.
+Tambien analizamos las canciones con duraciones muy cortas o demasiado largas.
 
 Identificamos 790 canciones con duración inferior a un minuto y 550 canciones con duración superior a diez minutos.
 
@@ -189,7 +189,7 @@ Por esta razón decidimos conservar estos registros, ya que eliminarlos podría 
 | Después de revisar popularidad cero | 89.740 |
 | Después de revisar valores atípicos | 89.740 |
 
-La preparación de datos permitio identificar y corregir problemas que podían afectar el analisis. Finalmente, obtuvimos un conjunto de 89.740 canciones unicas, conservando los valores de popularidad cero y las duraciones atípicas debido a que no encontramos evidencia suficiente para eliminarlos.
+La preparacion de datos permitio identificar y corregir problemas que podian afectar el analisis. Finalmente, obtuvimos un conjunto de 89.740 canciones unicas, conservando los valores de popularidad cero y las duraciones atipicas debido a que no encontramos evidencia suficiente para eliminarlos.
 
 ### 5.2 Análisis exploratorio de datos (EDA)
 
@@ -243,7 +243,7 @@ Los resultados muestran que existen diferencias importantes de popularidad entre
 
 Estos hallazgos nos permiten identificar variables que podrían ser utiles para el futuro modelo predictivo y comprender mejor cómo se comporta el catalogo musical.
 
-### 5.3 Variables menos relevantes para el modelo
+### 5.3 Relacion lineal entre variables numericas y popularidad
 
 Para identificar que caracteristicas tienen relacion con la popularidad, realizamos un analisis de correlacion entre las variables numericas del dataset.
 
@@ -271,7 +271,7 @@ Esto significa que algunas canciones de generos con baja popularidad promedio pu
 
 **Implicancia:** El genero musical parece ser una variable relevante para diferenciar los niveles de popularidad de las canciones. Por eso, consideramos importante incluirlo en el futuro modelo predictivo.
 
-**Conclusion:** El analisis exploratorio muestra que
+**Conclusión:** El analisis exploratorio muestra que el género musical puede influir en las diferencias de popularidad entre canciones. Sin embargo, pertenecer a un genero popular no asegura que una cancion tenga una popularidad alta. Por esta razon, consideramos importante utilizar el género junto con otras características musicales para desarrollar y evaluar los modelos de Machine Learning.
 
 ## 6. Evaluacion de sesgos, etica y privacidad de los datos
 
@@ -291,7 +291,7 @@ Por esta razon, lo consideramos una limitacion del conjunto de datos y no un res
 
 El dataset original contiene 1.000 registros por cada uno de los 114 generos musicales. Esta distribucion no necesariamente representa la cantidad real de canciones o reproducciones que tiene cada genero en Spotify.
 
-Ademas, al eliminar las canciones duplicadas por `track_id`, algunos generos pueden quedar con menos registros que otros.
+Ademas, al eliminar las canciones duplicadas por track_id, el numero de generos paso de 114 a 113: el genero songwriter dejo de aparecer. Los generos restantes quedaron con cantidades diferentes, entre 74 y 1.000 canciones por genero.
 
 Esto podria afectar los resultados del futuro modelo, ya que algunos generos podrian tener mayor representacion que otros.
 
@@ -329,7 +329,7 @@ Para considerar la proteccion de los datos, tomamos como referencia:
 
 En caso de utilizar esta informacion con fines comerciales, tambien seria necesario revisar los terminos y condiciones de uso de los datos de Spotify.
 
-**Conclusion:** Identificar estos posibles sesgos y riesgos nos permite comprender que los resultados del modelo podrian afectar de manera diferente a los artistas y generos musicales. Por eso, es importante evaluar estos aspectos antes de utilizar las predicciones para tomar decisiones comerciales.
+Identificar estos posibles sesgos y riesgos nos permite comprender que los resultados del modelo podrian afectar de manera diferente a los artistas y generos musicales. Por eso, es importante evaluar estos aspectos antes de utilizar las predicciones para tomar decisiones comerciales.
 
 ## 7. Conclusiones del proyecto
 
