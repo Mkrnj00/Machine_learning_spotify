@@ -246,6 +246,22 @@ El objetivo es identificar patrones que puedan ayudarnos a seleccionar las varia
 
 **Implicancia:** El contenido explicito podria ser una variable util para el analisis, pero esta relacion no demuestra que una cancion sea mas popular por ser explicita. Tambien debemos considerar los posibles riesgos eticos de utilizar esta caracteristica para recomendar o promocionar musica.
 
+**5. Investigación de Canciones con Popularidad Cero por Género**
+Analizamos si la concentración de canciones con popularidad igual a 0 responde a géneros musicales específicos o si está distribuida de manera uniforme en el dataset.
+
+![](images/image17.png)
+
+Las canciones con popularidad cero no están distribuidas de manera uniforme. De hecho, se concentran fuertemente en géneros particulares.
+
+No  representan "datos faltante" (como un valor nulo en la base de datos), sino más bien pistas inactivas en la plataforma dentro de esos nichos. Una posible hipotesis es que sean sonidos ambientales para estudiar y dormir; Pero el dataset no permite validarlo.
+
+**Objetivo:** determinar si los ceros están repartidos al azar o concentrados.
+
+**Hallazgo:** los ceros son ~10,5% del dataset y se concentran: jazz 78%, iranian 66%, romance 61%, country 59%, latin 57%.
+
+**Implicancia:** no son datos faltantes sino un patrón por género; eliminarlos sesgaría el modelo contra esos géneros.
+
+**Decición en torno a los valores 0** : Se ha decidido mantenerlos, ya que reflejan canciones reales. El modelo debe aprender que ciertos géneros tienden a 0.
 **Conclusion del analisis exploratorio**
 
 Los resultados muestran que existen diferencias importantes de popularidad entre generos y artistas. En cambio, caracteristicas como la duracion no presentan una relacion lineal fuerte con la popularidad.
