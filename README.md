@@ -1,14 +1,17 @@
 # Inteligencia Musical: Predicción de Popularidad de Canciones en Spotify
 
-**Asignatura:** MLY1101 – Machine Learning **Evaluación:** Evaluación Parcial N°1 – Presentación y defensa técnica del proyecto **Caso:** C – Inteligencia musical y predicción de popularidad de canciones (Spotify Tracks) **Integrantes del grupo:** \[Matías Cornejo, José Filidey, Gerald Santana\] **Fecha:** \[14/09/2026\]
+- **Asignatura:** MLY1101 – Machine Learning
+- **Caso:** C – Inteligencia musical y predicción de popularidad de canciones (Spotify Tracks)
+- **Integrantes del grupo:** Matías Cornejo, José Filidey, Gerald Santana
+- **Fecha:** 14/09/2026 - Actualidad
 
 ## 1. Descripción del problema de negocio
 
-La plataforma de Spotify necesita anticipar qué canciones tienen mayor probabilidad de ser populares para optimizar decisiones de inversión en marketing y promoción de artistas. Por lo que requieren un análisis exploratorio de los datos, evaluación de sesgos y una serie de conclusiones preliminares para empezar a tomar decisiones sobre su catálogo.
+La plataforma de Spotify necesita conocer qué canciones tienen mayor probabilidad de ser populares para optimizar decisiones de inversión en marketing y promoción de artistas. Por lo que requieren un análisis exploratorio de los datos, evaluación de sesgos y una serie de conclusiones preliminares para empezar a tomar decisiones sobre su catálogo.
 
 ### 1.1 Planteamiento del problema
 
-¿Es posible predecir el nivel de popularidad de una canción a partir de sus características de audio (danceability, energy, tempo, etc.) y metadatos (género, duración, explicit)?
+¿Es posible clasificar o predecir el nivel de popularidad de una canción a partir de sus características de audio (danceability, energy, tempo, etc.) y metadatos (género, duración, explicit)?
 
 Esta pregunta resume principalmente el objetivo general de los requerimientos del cliente. Puesto que a un nivel general predecir qué canciones priorizar o en que artistas invertir reduce el riesgo de pérdidas y aumenta la probabilidad de ganancias futuras.
 
@@ -28,16 +31,21 @@ Identificar las variables más relevantes para la predicción de popularidad.
 
 Evaluar posibles sesgos y consideraciones éticas asociadas al uso de estos datos.
 
+Comparar modelos supervisados de clasificación (árbol de decisión y random forest) para predecir si una canción es popular.
+
+Segmentar las canciones según su perfil de audio mediante un modelo no supervisado.
+
 ### 2.3 KPIs del proyecto
 
-Definimos los siguientes indicadores y metas para la futura evaluación del modelo. Como la variable popularity tiene valores entre 0 y 100, se propone predecir primero ese puntaje y evaluar los resultados con métricas de regresion. Para los indicadores que necesitan identificar canciones populares, se usara el criterio operativo popularidad real o predicha ≥ 60, segun corresponda. Esto es una definicion de trabajo, no un resultado del modelo.
+Definimos los siguientes indicadores y metas para evaluar los modelos. El enfoque final es de **clasificación binaria**: una canción se considera popular si su popularidad es ≥ 60.
 
-| KPI | Definición | Meta propuesta |
-|---|---|---|
-| Precision entre canciones predichas populares | De las canciones con popularidad predicha ≥ 60, porcentaje que realmente tiene popularidad ≥ 60. | ≥ 40% |
-| Equidad entre generos | Diferencia entre el MAE del genero con mayor error y el de menor error, medida en puntos de popularidad. | ≤ 10 puntos |
-| Tasa de falsos positivos | De las canciones con popularidad real < 60, porcentaje que el modelo predice con popularidad ≥ 60. | ≤ 15% |
-| Error de predicción (MAE) | Diferencia absoluta promedio entre popularidad real y predicha. | Reducir al menos 20% el MAE respecto de predecir el promedio del genero |
+**Las metas se fijaron antes de entrenar y no se modificaron al ver los resultados.**
+
+| KPI | Definición | Meta | Resultado | Estado |
+|---|---|---|---|---|
+| Precisión | De las canciones que el modelo predice como populares (popularidad ≥ 60), porcentaje que realmente lo es | ≥ 40% | Bosque ampliado: 22,0% · Árbol ampliado: 24,1% | No cumple (umbral 0,5) |
+| Tasa de falsos positivos | De las canciones con popularidad < 60, porcentaje que el modelo predice como populares | ≤ 15% | Bosque ampliado: 32,6% · Árbol ampliado: 17,4% | No cumple (umbral 0,5) |
+| Equidad entre géneros | Diferencia de la tasa de falsos positivos entre el género mejor y el peor predicho | ≤ 10 puntos | [No evaluado / resultado] | [Estado] |
 
 ### 2.4 Metodologia utilizada (CRISP-DM)
 
@@ -45,35 +53,35 @@ Para desarrollar este proyecto utilizamos la metodología CRISP-DM, que permite 
 
 | Etapa | Descripción | Estado |
 |---|---|---|
-| 1. Comprension del negocio | Se identifico la necesidad de analizar y predecir la popularidad de las canciones para apoyar las decisiones de promocion musical. | Realizado |
-| 2. Comprension de los datos | Se exploro el dataset de Spotify, revisando sus variables, columnas, valores nulos y relaciones con la popularidad. | Realizado |
-| 3. Preparacion de los datos | Se realizo la limpieza de valores nulos, el tratamiento de canciones duplicadas y la revision de valores atipicos para preparar los datos. | Realizado |
-| 4. Modelado | Se planifica entrenar y comparar modelos supervisados, además de explorar una técnica no supervisada, en la siguiente etapa. | Pendiente |
-| 5. Evaluación | Se evaluarán los modelos utilizando métricas y los KPIs definidos cuando se complete el entrenamiento. | Pendiente |
-| 6. Despliegue | En una etapa posterior se podra utilizar el modelo para apoyar decisiones relacionadas con la promocion de canciones. | Pendiente |
+| 1. Comprensión del negocio | Se identificó la necesidad de analizar y predecir la popularidad de las canciones para apoyar decisiones de promoción musical. | Realizado |
+| 2. Comprensión de los datos | Se exploró el dataset de Spotify, revisando variables, valores nulos y relaciones con la popularidad. | Realizado |
+| 3. Preparación de los datos | Se eliminaron nulos y duplicados y se revisaron valores atípicos y popularidad cero. | Realizado |
+| 4. Modelado | Se entrenaron modelos supervisados (árbol de decisión y random forest) y un modelo no supervisado (K-Means). | Realizado |
+| 5. Evaluación | Se evaluaron los modelos con precisión, recall, F1, AUC y tasa de falsos positivos frente a una línea base; los KPIs de precisión y falsos positivos no se alcanzaron con el umbral 0,5. | Realizado |
+| 6. Despliegue | En una etapa posterior se podría usar el modelo como filtro auxiliar para priorizar canciones. | Pendiente |
 
-En esta primera etapa del proyecto nos enfocamos en comprender el problema, analizar la información y preparar los datos. Esto nos permite contar con una base más confiable para desarrollar posteriormente el modelo predictivo.
+El proyecto cubre desde la comprensión del problema hasta la evaluación de los modelos. El despliegue queda fuera del alcance de esta entrega.
  
 ## 3. Estadísticas descriptivas del dataset
 
 Para conocer mejor la informacion disponible, realizamos un analisis inicial utilizando funciones de Python como `nunique()`, `mean()`, `info()` y `describe()`.
 
-El dataset original contiene 114.000 registros y 21 columnas, incluyendo una columna de índice que no aporta información al analisis.
+El dataset original contiene 114.000 registros y 21 columnas, incluyendo una columna de índice que no aporta información al análisis.
 
 | Indicador | Resultado |
 |---|---|
 | Registros originales | 114.000 |
 | Artistas únicos | 31.437 |
-| Albumes únicos | 46.589 |
-| Nombres de canciones unicos | 73.608 |
+| Álbumes únicos | 46.589 |
+| Nombres de canciones únicos | 73.608 |
 | Canciones únicas por `track_id` después de eliminar nulos | 89.740 |
 | Popularidad promedio del dataset original | 33,24 |
-| Generos musicales en el dataset original | 114 |
-| Generos musicales después de la limpieza | 113 |
+| Géneros musicales en el dataset original | 114 |
+| Géneros musicales después de la limpieza | 113 |
 
-Para contar correctamente las canciones unicas utilizamos `track_id`, ya que diferentes canciones pueden tener el mismo nombre. Ademas, identificamos que algunas canciones aparecen repetidas porque están clasificadas en más de un género musical.
+Para contar correctamente las canciones únicas utilizamos `track_id`, ya que diferentes canciones pueden tener el mismo nombre. Además, identificamos que algunas canciones aparecen repetidas porque están clasificadas en más de un género musical.
 
-Por lo cual este analisis nos permitio conocer la cantidad de información disponible y detectar registros repetidos. Por eso, fue necesario realizar una limpieza de datos antes de continuar con el análisis de popularidad.,
+Por lo cual este análisis nos permitió conocer la cantidad de información disponible y detectar registros repetidos. Por eso, fue necesario realizar una limpieza de datos antes de continuar con el análisis de popularidad.,
 
 ![](images/image10.png)
 
@@ -91,10 +99,12 @@ Para desarrollar el proyecto utilizamos google colab, ya que nos permite trabaja
 
 Estas herramientas nos permiten mantener el proyecto organizado.
 
-  | Herramienta | Uso | Justificacion |
-  |--|--|--|
-  | Google Colab | Desarrollo del notebook | Herramienta hecha para poder crear notebooks de ciencia de datos con python y mediante el uso de la importacion de librerias, no es necesario descargar nada |
-  | GitHub | Versionado y entrega | Para mantener registro del aporte de cada miembro, controlar las versiones del proyecto y poder reproducir el proyecto |
+| Herramienta | Uso | Justificación |
+|---|---|---|
+| Google Colab | Desarrollo del notebook | Herramienta hecha para crear notebooks de ciencia de datos con Python y, mediante la importación de librerías, no es necesario descargar nada |
+| GitHub | Versionado y entrega | Para mantener registro del aporte de cada miembro, controlar las versiones del proyecto y poder reproducir el proyecto |
+| Google Drive | Almacenamiento del dataset | Permite montar el archivo en Colab sin tener que buscarlo y compartir los archivos entre los integrantes |
+| Claude (Anthropic) | Asistencia en la escritura, revisión y explicación del código | Apoyo para escribir y depurar el código del notebook y entender los resultados |
 
 ### 4.2 Estructura del dataset
 
@@ -163,15 +173,15 @@ Esta decisión también tiene una limitación, ya que algunas canciones pertenec
 
 **3. Análisis de canciones con popularidad cero**
 
-Durante el analisis identificamos canciones con un valor de popularidad igual a cero.
+Durante el análisis identificamos canciones con un valor de popularidad igual a cero.
 
-Despues de la limpieza encontramos 9.447 canciones con popularidad cero (10,53%). Estos valores se concentran de manera diferente segun el genero, por ejemplo en el analisis aparecen proporciones altas en jazz, iranian y romance. Esto no demuestra que sean errores, sino que podrian reflejar caracteristicas de los datos o de como se asigna la popularidad.
+Después de la limpieza encontramos 9.447 canciones con popularidad cero (10,53%). Estos valores se concentran de manera diferente según el genero, por ejemplo en el análisis aparecen proporciones altas en jazz, iranian y romance. Esto no demuestra que sean errores, sino que podrían reflejar características de los datos o de como se asigna la popularidad.
 
 Por este motivo decidimos conservar estos registros y tener en cuenta su distribución por género al evaluar los modelos.
 
 **4. Revisión de valores atípicos en la duración**
 
-Tambien analizamos las canciones con duraciones muy cortas o demasiado largas.
+También analizamos las canciones con duraciones muy cortas o demasiado largas.
 
 Identificamos 790 canciones con duración inferior a un minuto y 550 canciones con duración superior a diez minutos.
 
@@ -273,13 +283,60 @@ Esto significa que algunas canciones de generos con baja popularidad promedio pu
 
 **Conclusión:** El analisis exploratorio muestra que el género musical puede influir en las diferencias de popularidad entre canciones. Sin embargo, pertenecer a un genero popular no asegura que una cancion tenga una popularidad alta. Por esta razon, consideramos importante utilizar el género junto con otras características musicales para desarrollar y evaluar los modelos de Machine Learning.
 
-## 6. Evaluacion de sesgos, etica y privacidad de los datos
+## 6. Modelado supervisado
+
+### 6.1 Planteamiento
+
+Se plantea un problema de **clasificación binaria**: predecir si una canción es popular (popularidad ≥ 60) o no. Con este criterio, aproximadamente el 10% de las canciones son populares. Se eligió ≥ 60 porque representa canciones realmente exitosas, que es lo que interesa para decidir inversión en promoción, y porque coincide con la definición usada en los KPIs.
+
+Se construyeron 134 variables en 4 grupos: **audio** (11), **estructura** (3: duración, tonalidad y compás), **título y colaboración** (7: número de artistas, indicadores de remix, live, remaster y feat, largo del título y si es single) y **género** (113 columnas, una por género).
+
+### 6.2 División de los datos y balanceo
+
+- **División:** 80% entrenamiento y 20% prueba (19.004 canciones), agrupando por **artista principal** para que ningún artista aparezca en ambos conjuntos. Además, se eliminaron del entrenamiento 12.630 canciones donde cualquier artista (incluidos invitados) aparece en el conjunto de prueba, para evitar fuga de información.
+- **Balanceo:** solo en entrenamiento y por submuestreo aleatorio de la clase mayoritaria (no populares), sin repetir filas ni crear datos sintéticos. Quedaron 5.555 canciones por clase (11.110 en total), lo que descarta cerca del 81% del entrenamiento.
+- **Prueba:** se mantuvo intacta, con ~90% de canciones no populares y ~10% populares.
+- **Hiperparámetros:** la profundidad máxima de cada modelo se eligió con validación cruzada agrupada por artista, usando solo el entrenamiento. La grilla se limitó para mantener el tiempo de ejecución en torno a 3 minutos; en los modelos ampliados el mejor valor quedó en el extremo (árbol: 16, bosque: 20), por lo que una mayor profundidad podría mejorar levemente el resultado.
+
+### 6.3 Resultados
+
+Se compararon cinco modelos en el conjunto de prueba, con umbral de decisión 0,5:
+
+| Modelo | Accuracy | Precisión | Recall | F1 | AUC | Tasa FP |
+|---|---|---|---|---|---|---|
+| Línea base (siempre "no popular") | 0,898 | 0,000 | 0,000 | 0,000 | 0,500 | 0,000 |
+| Árbol, solo audio | 0,511 | 0,141 | 0,739 | 0,237 | 0,631 | 0,515 |
+| Bosque, solo audio | 0,508 | 0,146 | 0,784 | 0,246 | 0,685 | 0,523 |
+| Árbol, ampliado | 0,791 | 0,241 | 0,485 | 0,322 | 0,691 | 0,174 |
+| **Bosque, ampliado** | 0,687 | 0,220 | **0,805** | **0,345** | **0,817** | 0,326 |
+
+- La **accuracy no es una referencia útil**: la línea base logra 0,898 solo porque ~90% de las canciones no son populares.
+- El **bosque ampliado** obtuvo el mejor AUC, F1 y recall, y es el modelo preferido. El árbol ampliado logró mayor precisión y menos falsos positivos con ese umbral, además de ser interpretable.
+- La **precisión es baja** en todos los modelos (0,14–0,24), pero supera la tasa base de canciones populares (~10%). Subir el umbral aumentaría la precisión a costa de encontrar menos canciones populares.
+- **Variables que más aportan** (caída del AUC al desordenar cada grupo en el bosque ampliado): género 0,148, audio 0,101, título y colaboración 0,034 y estructura 0,009. Esto indica aporte a la predicción, no causalidad.
+
+**Conclusión:** los modelos tienen un desempeño moderado y no alcanzan las metas de precisión (40%) ni de falsos positivos (15%) con el umbral 0,5. Sirven como filtro auxiliar para priorizar canciones, no como único criterio de inversión.
+
+## 7. Modelo no supervisado: segmentación de canciones
+
+Se aplicó **K-Means** sobre 9 variables continuas de audio estandarizadas, sin usar popularidad ni género, para ver si existen "tipos" de canciones. Se eligió **k = 4**: la silueta más alta es la de k = 2 (≈ 0,26), pero solo separaría canciones calmas de intensas; con k = 4 la silueta es ≈ 0,17 y los grupos son interpretables. Una silueta baja indica que los grupos se solapan.
+
+| Grupo | Perfil de audio | Géneros dominantes | Canciones | Popularidad ≥ 60 | Popularidad 0 |
+|---|---|---|---|---|---|
+| Calmas y acústicas | Energía baja (0,26), muy acústicas (0,78) | ambient, new-age, sleep, classical | 18.648 | 8,2% | 14,5% |
+| En vivo y habladas | Mucha presencia de público (0,74) y de habla (0,21) | comedy, pagode, sertanejo, samba | 7.001 | 5,3% | 5,4% |
+| Bailables y alegres | Danceability (0,69) y valence (0,67) altas | salsa, kids, dancehall, forro | 36.646 | 13,8% | 12,0% |
+| Intensas y rápidas | Energía alta (0,80), tempo 136 BPM, poco acústicas | black-metal, grindcore, death-metal, drum-and-bass | 27.445 | 10,3% | 7,3% |
+
+**Conclusión:** el audio separa tipos de canciones coherentes con familias de géneros, pero se relaciona solo débilmente con la popularidad (la proporción de canciones ≥ 60 va de 5,3% a 13,8%). La segmentación sirve para describir el catálogo, no para predecir éxito.
+
+## 8. Evaluacion de sesgos, etica y privacidad de los datos
 
 Durante el desarrollo del proyecto identificamos algunos posibles sesgos y riesgos eticos que pueden afectar los resultados de un futuro modelo de Machine Learning.
 
 Es importante considerar estos aspectos, ya que el objetivo no es solamente predecir la popularidad, sino tambien evitar decisiones que puedan perjudicar a ciertos artistas o generos musicales.
 
-### 6.1 Posibles sesgos
+### 8.1 Posibles sesgos
 
 **Sesgo temporal:**
 
@@ -295,9 +352,12 @@ Ademas, al eliminar las canciones duplicadas por track_id, el numero de generos 
 
 Esto podria afectar los resultados del futuro modelo, ya que algunos generos podrian tener mayor representacion que otros.
 
-### 6.2 Consideraciones eticas
+**Desbalance de clases:**
+Solo ~10% de las canciones son populares (≥ 60). Para entrenar, se balanceó por submuestreo, descartando cerca del 81% del entrenamiento. Esto reduce la información disponible y hace que las probabilidades del modelo no reflejen la proporción real, por lo que el umbral de decisión debe elegirse con cuidado.
 
-**Riesgo de retroalimentacion algoritmica:**
+### 8.2 Consideraciones éticas
+
+**Riesgo de retroalimentación algorítmica:**
 
 Si Spotify utiliza un modelo para promocionar solamente las canciones que tienen mayor popularidad, podria generar un ciclo donde los artistas populares reciben cada vez mas visibilidad, mientras que otros tienen menos oportunidades.
 
@@ -305,39 +365,44 @@ Si Spotify utiliza un modelo para promocionar solamente las canciones que tienen
 
 Los artistas reconocidos generalmente cuentan con mas recursos, publicidad y seguidores que los artistas independientes.
 
-Si el modelo utiliza solamente la popularidad historica, podria favorecer a los artistas consolidados y dificultar que nuevos artistas tengan oportunidades de promocion.
+Si el modelo utiliza solamente la popularidad histórica, podría favorecer a los artistas consolidados y dificultar que nuevos artistas tengan oportunidades de promoción.
 
 **Uso de la variable explicit:**
 
-Durante el analisis encontramos diferencias en la proporcion de canciones explicitas entre el catalogo general y las canciones con mayor popularidad.
+Durante el análisis encontramos diferencias en la proporción de canciones explicitas entre el catalogo general y las canciones con mayor popularidad.
 
 Sin embargo, esto no significa que el contenido explicito provoque mayor popularidad. Utilizar esta variable para decidir que canciones promocionar podria generar decisiones poco equilibradas.
 
-### 6.3 Privacidad y proteccion de los datos
+**Riesgo de que el modelo desfavorezca géneros poco populares:**
+Como el género es el grupo de variables que más aporta a la predicción, usar el modelo para decidir qué promocionar podría perjudicar sistemáticamente a géneros o artistas independientes con baja popularidad histórica. Por eso, las predicciones deben usarse como apoyo y no como criterio único.
 
-El dataset utilizado no contiene informacion personal de los usuarios que escuchan musica, como nombres, correos electronicos o historial individual de reproducciones.
 
-La popularidad corresponde a un indicador general de cada cancion.
+### 8.3 Privacidad y protección de los datos
 
-Sin embargo, el dataset contiene nombres de artistas, por lo que es importante utilizar esta informacion de manera responsable y solamente para los objetivos academicos del proyecto.
+El dataset utilizado no contiene información personal de los usuarios que escuchan musica, como nombres, correos electrónicos o historial individual de reproducciones.
 
-Para considerar la proteccion de los datos, tomamos como referencia:
+La popularidad corresponde a un indicador general de cada canción.
 
-- **Ley 19.628:** normativa chilena relacionada con la proteccion de datos personales.
-- **Ley 21.719:** nueva normativa chilena que modifica el marco de proteccion de datos personales.
-- **GDPR:** reglamento europeo que establece principios relacionados con el uso responsable y la proteccion de datos.
+Sin embargo, el dataset contiene nombres de artistas, por lo que es importante utilizar esta información de manera responsable y solamente para los objetivos académicos del proyecto.
 
-En caso de utilizar esta informacion con fines comerciales, tambien seria necesario revisar los terminos y condiciones de uso de los datos de Spotify.
+Para considerar la protección de los datos, tomamos como referencia:
 
-Identificar estos posibles sesgos y riesgos nos permite comprender que los resultados del modelo podrian afectar de manera diferente a los artistas y generos musicales. Por eso, es importante evaluar estos aspectos antes de utilizar las predicciones para tomar decisiones comerciales.
+- **Ley 19.628:** normativa chilena relacionada con la protección de datos personales.
+- **Ley 21.719:** nueva normativa chilena que modifica el marco de protección de datos personales.
+- **GDPR:** reglamento europeo que establece principios relacionados con el uso responsable y la protección de datos.
 
-## 7. Conclusiones del proyecto
+En caso de utilizar esta información con fines comerciales, también seria necesario revisar los términos y condiciones de uso de los datos de Spotify.
 
-Durante el desarrollo de este proyecto realizamos un analisis exploratorio del dataset de Spotify para identificar que caracteristicas pueden estar relacionadas con la popularidad de las canciones.
+Identificar estos posibles sesgos y riesgos nos permite comprender que los resultados del modelo podrían afectar de manera diferente a los artistas y géneros musicales. Por eso, es importante evaluar estos aspectos antes de utilizar las predicciones para tomar decisiones comerciales.
 
-Los resultados nos permitieron comprender mejor el comportamiento de los datos, identificar problemas de calidad y reconocer variables que podrian ser importantes para un futuro modelo de Machine Learning.
 
-### 7.1 Principales hallazgos
+## 9. Conclusiones del proyecto
+
+Durante el desarrollo de este proyecto realizamos un análisis exploratorio del dataset de Spotify para identificar que características pueden estar relacionadas con la popularidad de las canciones.
+
+Los resultados nos permitieron comprender mejor el comportamiento de los datos, identificar problemas de calidad y reconocer variables que podrían ser importantes para un futuro modelo de Machine Learning.
+
+### 9.1 Principales hallazgos
 
 **1. Importancia del genero musical**
 
@@ -351,35 +416,40 @@ Las variables de audio, como energia, tempo, duracion y otras caracteristicas, p
 
 Esto indica que ninguna de estas variables, por si sola, permite explicar completamente la popularidad de una cancion.
 
-**3. Calidad y preparacion de los datos**
+**3. Calidad y preparación de los datos**
 
-Durante la preparacion identificamos valores nulos, canciones duplicadas y valores atipicos.
+Durante la preparación identificamos valores nulos, canciones duplicadas y valores atípicos.
 
-Despues de realizar la limpieza, el dataset quedo con 89.740 canciones unicas, lo que permite trabajar con informacion mas organizada para las siguientes etapas.
+Después de realizar la limpieza, el dataset quedo con 89.740 canciones únicas, lo que permite trabajar con información mas organizada para las siguientes etapas.
 
-**4. Sesgos y aspectos eticos**
+**4. Sesgos y aspectos éticos**
 
-Identificamos posibles sesgos relacionados con la representacion de generos, la popularidad de artistas consolidados y la falta de informacion temporal.
+Identificamos posibles sesgos relacionados con la representación de géneros, la popularidad de artistas consolidados y la falta de información temporal.
 
-Tambien consideramos aspectos de privacidad y los posibles efectos de utilizar las predicciones para decidir que canciones promocionar.
+También consideramos aspectos de privacidad y los posibles efectos de utilizar las predicciones para decidir que canciones promocionar.
 
-### 7.2 Cumplimiento de los objetivos especificos
+**5. Desempeño de los modelos supervisados**
 
-| Objetivo especifico | Resultado obtenido | Cumplimiento |
+El mejor modelo fue el bosque ampliado (AUC 0,82, recall 0,81). Su precisión (0,22 con umbral 0,5) supera la tasa base de canciones populares (~10%), pero no alcanza la meta de 40%. El género fue el grupo de variables que más aportó a la predicción, seguido por las variables de audio.
+
+**6. Segmentación de canciones**
+
+El audio permite formar cuatro tipos de canciones coherentes con familias de géneros, pero esos grupos se relacionan débilmente con la popularidad.
+
+### 9.2 Cumplimiento de los objetivos específicos
+
+| Objetivo específico | Resultado obtenido | Cumplimiento |
 |---|---|---|
-| Realizar un analisis exploratorio para identificar patrones | Se identificaron diferencias de popularidad entre generos y relaciones debiles con las variables de audio. | Cumplido |
-| Evaluar la calidad y preparar los datos | Se eliminaron valores nulos y duplicados, ademas de revisar los valores atipicos y la popularidad cero. | Cumplido |
-| Identificar variables relevantes para la prediccion | El genero musical mostro diferencias importantes de popularidad, mientras que las variables de audio presentaron correlaciones lineales debiles. | Cumplido en etapa exploratoria |
-| Evaluar sesgos y consideraciones eticas | Se identificaron posibles sesgos, riesgos eticos y aspectos relacionados con la privacidad. | Cumplido en etapa exploratoria |
+| Realizar un análisis exploratorio para identificar patrones | Se identificaron diferencias de popularidad entre géneros y relaciones débiles con las variables de audio. | Cumplido |
+| Evaluar la calidad y preparar los datos | Se eliminaron valores nulos y duplicados, además de revisar los valores atípicos y la popularidad cero. | Cumplido |
+| Identificar variables relevantes para la predicción | El género fue el grupo que más aportó a la predicción (caída del AUC de 0,148), seguido por el audio (0,101); las variables de audio solas tienen correlaciones lineales débiles. | Cumplido |
+| Evaluar sesgos y consideraciones éticas | Se identificaron posibles sesgos, riesgos éticos y aspectos relacionados con la privacidad. | Cumplido |
+| Comparar modelos supervisados de clasificación | Se entrenaron cinco modelos frente a una línea base; el bosque ampliado fue el mejor (AUC 0,82). | Cumplido; los KPIs de precisión y falsos positivos no se alcanzaron |
+| Segmentar canciones con un modelo no supervisado | K-Means con 4 grupos interpretables por perfil de audio y género. | Cumplido |
 
-### 7.3 Conclusion general
+### 9.3 Conclusión general
 
-Como conclusion, consideramos que el proyecto nos permitio comprender mejor los factores que pueden estar relacionados con la popularidad de las canciones en Spotify.
+Como conclusión, el proyecto permitió comprender los factores asociados a la popularidad de las canciones y evaluar si es posible predecirla. Los modelos supervisados muestran un desempeño moderado: el bosque ampliado ordena razonablemente las canciones (AUC 0,82), pero con el umbral 0,5 su precisión (22,0%) y su tasa de falsos positivos (32,6%) no cumplen las metas de ≥ 40% y ≤ 15%. Aun así, supera la proporción de canciones populares del catálogo (~10%). El género musical es el grupo de variables que más aporta a la predicción, lo que no implica que cause la popularidad. El análisis no supervisado muestra que el audio forma tipos de canciones coherentes, pero débilmente relacionados con la popularidad.
 
-Uno de los principales hallazgos fue que el genero musical presenta diferencias importantes en los niveles de popularidad, mientras que las caracteristicas de audio tienen relaciones lineales mas debiles.
+En conjunto, el modelo sirve como filtro auxiliar para priorizar canciones, no como único criterio de inversión.
 
-Ademas, la limpieza de los datos fue necesaria para evitar que los registros duplicados afectaran los resultados.
-
-Aunque logramos cumplir los objetivos de esta primera etapa, todavia queda pendiente entrenar y evaluar un modelo de Machine Learning que permita comprobar si estas variables realmente ayudan a predecir la popularidad.
-
-Por lo tanto, el siguiente paso sera utilizar el dataset preparado para desarrollar el modelo predictivo y evaluar sus resultados mediante los KPIs definidos anteriormente.
