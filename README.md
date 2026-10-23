@@ -45,7 +45,6 @@ Definimos los siguientes indicadores y metas para evaluar los modelos. El enfoqu
 |---|---|---|---|---|
 | Precisión | De las canciones que el modelo predice como populares (popularidad ≥ 60), porcentaje que realmente lo es | ≥ 40% | Bosque ampliado: 22,0% · Árbol ampliado: 24,1% | No cumple (umbral 0,5) |
 | Tasa de falsos positivos | De las canciones con popularidad < 60, porcentaje que el modelo predice como populares | ≤ 15% | Bosque ampliado: 32,6% · Árbol ampliado: 17,4% | No cumple (umbral 0,5) |
-| Equidad entre géneros | Diferencia de la tasa de falsos positivos entre el género mejor y el peor predicho | ≤ 10 puntos | [No evaluado / resultado] | [Estado] |
 
 ### 2.4 Metodologia utilizada (CRISP-DM)
 
@@ -310,10 +309,14 @@ Se compararon cinco modelos en el conjunto de prueba, con umbral de decisión 0,
 | Árbol, ampliado | 0,791 | 0,241 | 0,485 | 0,322 | 0,691 | 0,174 |
 | **Bosque, ampliado** | 0,687 | 0,220 | **0,805** | **0,345** | **0,817** | 0,326 |
 
+![](images/image14.png)
+
 - La **accuracy no es una referencia útil**: la línea base logra 0,898 solo porque ~90% de las canciones no son populares.
 - El **bosque ampliado** obtuvo el mejor AUC, F1 y recall, y es el modelo preferido. El árbol ampliado logró mayor precisión y menos falsos positivos con ese umbral, además de ser interpretable.
 - La **precisión es baja** en todos los modelos (0,14–0,24), pero supera la tasa base de canciones populares (~10%). Subir el umbral aumentaría la precisión a costa de encontrar menos canciones populares.
 - **Variables que más aportan** (caída del AUC al desordenar cada grupo en el bosque ampliado): género 0,148, audio 0,101, título y colaboración 0,034 y estructura 0,009. Esto indica aporte a la predicción, no causalidad.
+
+![](images/image13.png)
 
 **Conclusión:** los modelos tienen un desempeño moderado y no alcanzan las metas de precisión (40%) ni de falsos positivos (15%) con el umbral 0,5. Sirven como filtro auxiliar para priorizar canciones, no como único criterio de inversión.
 
@@ -321,12 +324,16 @@ Se compararon cinco modelos en el conjunto de prueba, con umbral de decisión 0,
 
 Se aplicó **K-Means** sobre 9 variables continuas de audio estandarizadas, sin usar popularidad ni género, para ver si existen "tipos" de canciones. Se eligió **k = 4**: la silueta más alta es la de k = 2 (≈ 0,26), pero solo separaría canciones calmas de intensas; con k = 4 la silueta es ≈ 0,17 y los grupos son interpretables. Una silueta baja indica que los grupos se solapan.
 
+![](images/image15.png)
+
 | Grupo | Perfil de audio | Géneros dominantes | Canciones | Popularidad ≥ 60 | Popularidad 0 |
 |---|---|---|---|---|---|
 | Calmas y acústicas | Energía baja (0,26), muy acústicas (0,78) | ambient, new-age, sleep, classical | 18.648 | 8,2% | 14,5% |
 | En vivo y habladas | Mucha presencia de público (0,74) y de habla (0,21) | comedy, pagode, sertanejo, samba | 7.001 | 5,3% | 5,4% |
 | Bailables y alegres | Danceability (0,69) y valence (0,67) altas | salsa, kids, dancehall, forro | 36.646 | 13,8% | 12,0% |
 | Intensas y rápidas | Energía alta (0,80), tempo 136 BPM, poco acústicas | black-metal, grindcore, death-metal, drum-and-bass | 27.445 | 10,3% | 7,3% |
+
+![](images/image16.png)
 
 **Conclusión:** el audio separa tipos de canciones coherentes con familias de géneros, pero se relaciona solo débilmente con la popularidad (la proporción de canciones ≥ 60 va de 5,3% a 13,8%). La segmentación sirve para describir el catálogo, no para predecir éxito.
 
