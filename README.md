@@ -261,12 +261,7 @@ No  representan "datos faltante" (como un valor nulo en la base de datos), sino 
 
 **Implicancia:** no son datos faltantes sino un patrón por género; eliminarlos sesgaría el modelo contra esos géneros.
 
-**Decición en torno a los valores 0** : Se ha decidido mantenerlos, ya que reflejan canciones reales. El modelo debe aprender que ciertos géneros tienden a 0.
-**Conclusion del analisis exploratorio**
-
-Los resultados muestran que existen diferencias importantes de popularidad entre generos y artistas. En cambio, caracteristicas como la duracion no presentan una relacion lineal fuerte con la popularidad.
-
-Estos hallazgos nos permiten identificar variables que podrían ser utiles para el futuro modelo predictivo y comprender mejor cómo se comporta el catalogo musical.
+**Decición en torno a los valores 0:** Se ha decidido mantenerlos, ya que reflejan canciones reales. El modelo debe aprender que ciertos géneros tienden a 0.
 
 ### 5.3 Relacion lineal entre variables numericas y popularidad
 
@@ -417,7 +412,6 @@ Para considerar la protección de los datos, tomamos como referencia:
 En caso de utilizar esta información con fines comerciales, también seria necesario revisar los términos y condiciones de uso de los datos de Spotify.
 
 Identificar estos posibles sesgos y riesgos nos permite comprender que los resultados del modelo podrían afectar de manera diferente a los artistas y géneros musicales. Por eso, es importante evaluar estos aspectos antes de utilizar las predicciones para tomar decisiones comerciales.
-
 
 ## 9. Conclusiones del proyecto
 
